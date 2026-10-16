@@ -1,119 +1,174 @@
-let materials = JSON.parse(
-  localStorage.getItem("courseMaterials") || "[]"
-);
-
-function showSection(sectionId) {
-  document.querySelectorAll(".section").forEach(section => {
-    section.classList.add("hidden");
-  });
-
-  document.getElementById(sectionId).classList.remove("hidden");
-
-  if (sectionId === "browse") {
-    displayMaterials();
+const notes = [
+  {
+    id: 1, title: "Data Structures: Binary Search Trees & AVL Trees",
+    subject: "Data Structures", branch: "CSE", sem: 3,
+    category: "Comprehensive",
+    description: "BST insertion, searching, AVL rotations and balanced trees.",
+    author: "StudyHub Editorial",
+    url: "https://www.geeksforgeeks.org/data-structures/"
+  },
+  {
+    id: 2, title: "Operating Systems: CPU Scheduling & Deadlocks",
+    subject: "Operating Systems", branch: "CSE", sem: 4,
+    category: "Formula Sheet",
+    description: "FCFS, SJF, Round Robin, waiting time and deadlock concepts.",
+    author: "StudyHub Editorial",
+    url: "https://www.geeksforgeeks.org/operating-systems/"
+  },
+  {
+    id: 3, title: "Database Systems: SQL & Normalization",
+    subject: "DBMS", branch: "CSE", sem: 4,
+    category: "Comprehensive",
+    description: "SQL queries, keys, normalization and relational databases.",
+    author: "StudyHub Editorial",
+    url: "https://www.w3schools.com/sql/"
+  },
+  {
+    id: 4, title: "Computer Networks: OSI Model & TCP/IP",
+    subject: "Computer Networks", branch: "CSE", sem: 5,
+    category: "Exam Notes",
+    description: "Network layers, IPv4, subnetting and communication protocols.",
+    author: "StudyHub Editorial",
+    url: "https://www.geeksforgeeks.org/computer-network-tutorials/"
+  },
+  {
+    id: 5, title: "Digital Logic Design & Boolean Algebra",
+    subject: "Digital Logic", branch: "ECE", sem: 2,
+    category: "Formula Sheet",
+    description: "Logic gates, Boolean laws, K-maps and digital circuits.",
+    author: "StudyHub Editorial",
+    url: "https://www.geeksforgeeks.org/digital-logic/"
+  },
+  {
+    id: 6, title: "Programming Fundamentals with C",
+    subject: "C Programming", branch: "CSE", sem: 1,
+    category: "Beginner Notes",
+    description: "Variables, data types, loops, conditions, functions and arrays.",
+    author: "StudyHub Editorial",
+    url: "https://www.learn-c.org/"
+  },
+  {
+    id: 7, title: "Python Programming Fundamentals",
+    subject: "Python", branch: "CSE", sem: 2,
+    category: "Practical Notes",
+    description: "Python syntax, conditions, loops, functions and examples.",
+    author: "StudyHub Editorial",
+    url: "https://docs.python.org/3/tutorial/"
+  },
+  {
+    id: 8, title: "Engineering Mathematics Resources",
+    subject: "Mathematics", branch: "CSE", sem: 1,
+    category: "Exam Notes",
+    description: "Explore engineering mathematics concepts and practice resources.",
+    author: "StudyHub Editorial",
+    url: "https://nptel.ac.in/"
   }
+];
 
-  window.scrollTo({ top: 0, behavior: "smooth" });
+const platforms = [
+  {
+    name: "GeeksforGeeks",
+    category: "CS & IT",
+    description: "Computer science tutorials, coding examples and interview preparation.",
+    highlights: ["Structured tutorials", "Coding practice", "Algorithms and MCQs"],
+    best: "CS & IT Students",
+    url: "https://www.geeksforgeeks.org/"
+  },
+  {
+    name: "TutorialsPoint",
+    category: "CS & IT",
+    description: "Beginner-friendly tutorials covering programming and technical subjects.",
+    highlights: ["Easy explanations", "Many programming topics", "Quick references"],
+    best: "Beginners",
+    url: "https://www.tutorialspoint.com/"
+  },
+  {
+    name: "NPTEL",
+    category: "GATE & University",
+    description: "Courses and lectures from Indian institutes and subject experts.",
+    highlights: ["Engineering courses", "Video lectures", "Course learning"],
+    best: "Engineering Students",
+    url: "https://nptel.ac.in/"
+  },
+  {
+    name: "MIT OpenCourseWare",
+    category: "GATE & University",
+    description: "Free educational course materials from MIT.",
+    highlights: ["University-level materials", "Lecture notes", "Assignments"],
+    best: "Advanced Learners",
+    url: "https://ocw.mit.edu/"
+  },
+  {
+    name: "W3Schools",
+    category: "Web Dev & APIs",
+    description: "Learn HTML, CSS, JavaScript, SQL and other web technologies.",
+    highlights: ["Practical examples", "Try-it editor", "Beginner-friendly"],
+    best: "Web Developers",
+    url: "https://www.w3schools.com/"
+  },
+  {
+    name: "MDN Web Docs",
+    category: "Web Dev & APIs",
+    description: "Documentation and learning guides for web development.",
+    highlights: ["HTML and CSS", "JavaScript guides", "Web APIs"],
+    best: "Developers",
+    url: "https://developer.mozilla.org/"
+  },
+  {
+    name: "Sanfoundry",
+    category: "CS & IT",
+    description: "Technical subject tutorials and multiple-choice practice.",
+    highlights: ["Subject-wise questions", "Practice quizzes", "Engineering topics"],
+    best: "Engineering Students",
+    url: "https://www.sanfoundry.com/"
+  },
+  {
+    name: "StudyTonight",
+    category: "All Branches",
+    description: "Learning tutorials and programming study resources.",
+    highlights: ["Tutorials", "Programming topics", "Practice resources"],
+    best: "Students",
+    url: "https://www.studytonight.com/"
+  },
+  {
+    name: "Notes for Engineering",
+    category: "GATE & University",
+    description: "Engineering notes and reference resources.",
+    highlights: ["Subject references", "Exam preparation", "Technical topics"],
+    best: "Engineering Students",
+    url: "https://www.notesforengineering.com/"
+  },
+  {
+    name: "NCERT",
+    category: "All Branches",
+    description: "Official school textbooks and foundational learning materials.",
+    highlights: ["Official textbooks", "Science fundamentals", "Free resources"],
+    best: "Foundation Learning",
+    url: "https://ncert.nic.in/"
+  }
+];
+
+function readStorage(key, fallback) {
+  try {
+    const value = JSON.parse(localStorage.getItem(key));
+    return value === null ? fallback : value;
+  } catch {
+    return fallback;
+  }
 }
 
-function searchFromHome() {
-  const subject = document.getElementById("homeSubject").value;
-
-  document.getElementById("searchInput").value = subject;
-
-  showSection("browse");
-  displayMaterials();
-}
-
-function addMaterial() {
-  const teacher = document.getElementById("teacherName").value.trim();
-  const subject = document.getElementById("subject").value.trim();
-  const topic = document.getElementById("topic").value.trim();
-  const course = document.getElementById("course").value.trim();
-  const link = document.getElementById("materialLink").value.trim();
-  const description = document.getElementById("description").value.trim();
-
-  if (!teacher || !subject || !topic || !course) {
-    document.getElementById("message").textContent =
-      "Please fill in teacher name, subject, topic and course.";
-    return;
+function saveStorage(key, value) {
+  try {
+    localStorage.setItem(key, JSON.stringify(value));
+    return true;
+  } catch {
+    alert("Could not save data in this browser.");
+    return false;
   }
-
-  if (link && !/^https?:\/\/\S+$/i.test(link)) {
-    document.getElementById("message").textContent =
-      "Please enter a valid link starting with http:// or https://";
-    return;
-  }
-
-  const material = {
-    id: Date.now(),
-    teacher,
-    subject,
-    topic,
-    course,
-    link,
-    description,
-    verified: false
-  };
-
-  materials.push(material);
-
-  localStorage.setItem(
-    "courseMaterials",
-    JSON.stringify(materials)
-  );
-
-  document.getElementById("message").textContent =
-    "Material submitted! It is awaiting verification.";
-
-  document.getElementById("teacherName").value = "";
-  document.getElementById("subject").value = "";
-  document.getElementById("topic").value = "";
-  document.getElementById("course").value = "";
-  document.getElementById("materialLink").value = "";
-  document.getElementById("description").value = "";
-}
-
-function displayMaterials() {
-  const search = document.getElementById("searchInput")
-    .value.toLowerCase().trim();
-
-  const list = document.getElementById("materialList");
-
-  const filtered = materials.filter(material =>
-    material.verified &&
-    (
-      material.subject.toLowerCase().includes(search) ||
-      material.topic.toLowerCase().includes(search) ||
-      material.course.toLowerCase().includes(search)
-    )
-  );
-
-  if (filtered.length === 0) {
-    list.innerHTML =
-      "<p>No verified materials found. Please try another search.</p>";
-    return;
-  }
-
-  list.innerHTML = filtered.map(material => `
-    <div class="material-card">
-      <h3>${escapeHTML(material.topic)}</h3>
-      <p><strong>Subject:</strong> ${escapeHTML(material.subject)}</p>
-      <p><strong>Course:</strong> ${escapeHTML(material.course)}</p>
-      <p><strong>Teacher:</strong> ${escapeHTML(material.teacher)}</p>
-      <p>${escapeHTML(material.description)}</p>
-      ${material.link
-        ? `<a href="${escapeHTML(material.link)}"
-             target="_blank" rel="noopener noreferrer">
-             Open Material
-           </a>`
-        : ""}
-    </div>
-  `).join("");
 }
 
 function escapeHTML(value) {
-  return String(value).replace(/[&<>"']/g, char => ({
+  return String(value ?? "").replace(/[&<>"']/g, char => ({
     "&": "&amp;",
     "<": "&lt;",
     ">": "&gt;",
@@ -122,4 +177,244 @@ function escapeHTML(value) {
   })[char]);
 }
 
-showSection("home");
+function safeURL(value) {
+  try {
+    const url = new URL(value);
+    return ["https:", "http:"].includes(url.protocol) ? url.href : "";
+  } catch {
+    return "";
+  }
+}
+
+function showSection(id) {
+  document.querySelectorAll(".section").forEach(section => {
+    section.classList.toggle("hidden", section.id !== id);
+  });
+
+  document.querySelectorAll(".nav-btn").forEach(button => {
+    button.classList.toggle("active", button.dataset.section === id);
+  });
+
+  if (id === "browse") renderBrowse();
+  if (id === "account") renderAccount();
+
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function quickSearch(term) {
+  document.getElementById("homeSearch").value = term;
+  document.getElementById("browseSearch").value = term;
+  showSection("browse");
+  renderBrowse();
+}
+
+document.getElementById("homeSearchForm").addEventListener("submit", event => {
+  event.preventDefault();
+  quickSearch(document.getElementById("homeSearch").value.trim());
+});
+
+document.getElementById("browseSearch").addEventListener("input", renderBrowse);
+document.getElementById("branchFilter").addEventListener("change", renderBrowse);
+document.getElementById("semesterFilter").addEventListener("change", renderBrowse);
+
+function noteCard(note) {
+  const bookmarks = readStorage("studyhubBookmarks", []);
+  const saved = bookmarks.includes(note.id);
+  const url = safeURL(note.url);
+
+  return `
+    <article class="note-card">
+      <div class="card-top">
+        <span class="tag">${escapeHTML(note.branch)} • SEM ${note.sem}</span>
+        <button class="bookmark" onclick="toggleBookmark(${Number(note.id)})"
+          aria-label="Toggle bookmark">${saved ? "★ Saved" : "☆ Save"}</button>
+      </div>
+      <span class="level">${escapeHTML(note.category)}</span>
+      <h3>${escapeHTML(note.title)}</h3>
+      <p class="card-category">● ${escapeHTML(note.subject)}</p>
+      <p>${escapeHTML(note.description)}</p>
+      <p>By ${escapeHTML(note.author)}</p>
+      <div class="card-actions">
+        <button onclick="previewNote(${Number(note.id)})">◉ Preview</button>
+        ${url
+          ? `<a class="download" href="${escapeHTML(url)}" target="_blank" rel="noopener noreferrer">↗ Open Resource</a>`
+          : `<button disabled>No Link</button>`}
+      </div>
+    </article>`;
+}
+
+function renderTrending() {
+  document.getElementById("trendingGrid").innerHTML =
+    notes.slice(0, 4).map(noteCard).join("");
+}
+
+function renderBrowse() {
+  const query = document.getElementById("browseSearch").value.toLowerCase().trim();
+  const branch = document.getElementById("branchFilter").value;
+  const semester = document.getElementById("semesterFilter").value;
+
+  const uploaded = readStorage("studyhubUploads", [])
+    .filter(item => item.status === "approved");
+
+  const allNotes = [...notes, ...uploaded];
+
+  const filtered = allNotes.filter(note => {
+    const searchable = [
+      note.title, note.subject, note.description,
+      note.branch, note.sem, note.topic, note.course
+    ].join(" ").toLowerCase();
+
+    return searchable.includes(query) &&
+      (!branch || note.branch === branch) &&
+      (!semester || String(note.sem) === semester);
+  });
+
+  document.getElementById("browseGrid").innerHTML = filtered.length
+    ? filtered.map(noteCard).join("")
+    : `<div class="empty-state">No materials found. Try another subject or filter.</div>`;
+}
+
+function filterPlatforms(category) {
+  document.querySelectorAll("#platformFilters .filter").forEach(button => {
+    button.classList.toggle("active", button.dataset.filter === category);
+  });
+
+  const filtered = category === "All"
+    ? platforms
+    : platforms.filter(platform => platform.category === category);
+
+  document.getElementById("platformGrid").innerHTML =
+    filtered.map((platform, index) => {
+      const url = safeURL(platform.url);
+
+      return `
+        <article class="platform-card">
+          <div class="card-top">
+            <span class="platform-number">#${String(platforms.indexOf(platform) + 1).padStart(2, "0")}</span>
+            ${url ? `<a class="bookmark" href="${escapeHTML(url)}"
+              target="_blank" rel="noopener noreferrer" aria-label="Open ${escapeHTML(platform.name)}">↗</a>` : ""}
+          </div>
+          <h3>${escapeHTML(platform.name)}</h3>
+          <p>${escapeHTML(platform.description)}</p>
+          <p class="highlights">KEY HIGHLIGHTS:</p>
+          <ul>${platform.highlights.map(item => `<li>${escapeHTML(item)}</li>`).join("")}</ul>
+          <div class="best-for">Best for: <strong>${escapeHTML(platform.best)}</strong></div>
+          <div class="card-actions">
+            ${url ? `<a class="download" href="${escapeHTML(url)}"
+              target="_blank" rel="noopener noreferrer">Visit Website ↗</a>` : ""}
+          </div>
+        </article>`;
+    }).join("");
+}
+
+function toggleBookmark(id) {
+  let bookmarks = readStorage("studyhubBookmarks", []);
+  bookmarks = bookmarks.includes(id)
+    ? bookmarks.filter(item => item !== id)
+    : [...bookmarks, id];
+
+  if (saveStorage("studyhubBookmarks", bookmarks)) {
+    renderTrending();
+    renderBrowse();
+    renderAccount();
+  }
+}
+
+function previewNote(id) {
+  const uploaded = readStorage("studyhubUploads", [])
+    .filter(item => item.status === "approved");
+  const note = [...notes, ...uploaded].find(item => item.id === id);
+  if (!note) return;
+
+  const url = safeURL(note.url || note.link);
+
+  document.getElementById("previewContent").innerHTML = `
+    <p class="eyebrow">${escapeHTML(note.branch)} · SEM ${escapeHTML(note.sem)}</p>
+    <h2>${escapeHTML(note.title || note.topic)}</h2>
+    <p><strong>Subject:</strong> ${escapeHTML(note.subject)}</p>
+    <p><strong>Contributor:</strong> ${escapeHTML(note.author || note.teacher)}</p>
+    <p>${escapeHTML(note.description || "Study material resource.")}</p>
+    ${url ? `<p><a class="primary-btn" href="${escapeHTML(url)}"
+      target="_blank" rel="noopener noreferrer">Open Study Resource ↗</a></p>` : ""}
+    <p class="footer-small">This preview shows the resource details. The linked website may contain the actual notes.</p>
+  `;
+
+  document.getElementById("previewDialog").showModal();
+}
+
+function closePreview() {
+  document.getElementById("previewDialog").close();
+}
+
+document.getElementById("previewDialog").addEventListener("click", event => {
+  if (event.target === event.currentTarget) closePreview();
+});
+
+function selectBranch(branch) {
+  document.getElementById("branchFilter").value = branch;
+  showSection("browse");
+}
+
+function selectSemester(semester) {
+  document.getElementById("semesterFilter").value = String(semester);
+  showSection("browse");
+}
+
+document.getElementById("uploadForm").addEventListener("submit", event => {
+  event.preventDefault();
+
+  const uploads = readStorage("studyhubUploads", []);
+
+  const item = {
+    id: Date.now(),
+    teacher: document.getElementById("teacherName").value.trim(),
+    author: document.getElementById("teacherName").value.trim(),
+    subject: document.getElementById("subject").value.trim(),
+    title: document.getElementById("topic").value.trim(),
+    topic: document.getElementById("topic").value.trim(),
+    branch: document.getElementById("uploadBranch").value,
+    sem: Number(document.getElementById("uploadSemester").value),
+    course: document.getElementById("uploadBranch").value,
+    link: document.getElementById("materialLink").value.trim(),
+    description: document.getElementById("description").value.trim(),
+    status: "pending"
+  };
+
+  if (item.link && !safeURL(item.link)) {
+    document.getElementById("uploadMessage").textContent =
+      "Enter a valid HTTP or HTTPS URL.";
+    return;
+  }
+
+  uploads.push(item);
+
+  if (saveStorage("studyhubUploads", uploads)) {
+    document.getElementById("uploadMessage").textContent =
+      "Submission saved in this browser. It is pending review and is not publicly published.";
+    event.target.reset();
+  }
+});
+
+function renderAccount() {
+  const bookmarks = readStorage("studyhubBookmarks", []);
+  const savedNotes = notes.filter(note => bookmarks.includes(note.id));
+
+  document.getElementById("bookmarksGrid").innerHTML = savedNotes.length
+    ? savedNotes.map(noteCard).join("")
+    : `<div class="empty-state">No bookmarks yet. Save a note to see it here.</div>`;
+
+  const uploads = readStorage("studyhubUploads", []);
+
+  document.getElementById("myUploads").innerHTML = uploads.length
+    ? uploads.map(item => `
+        <div class="note-card">
+          <h3>${escapeHTML(item.title)}</h3>
+          <p>${escapeHTML(item.subject)} · ${escapeHTML(item.branch)}</p>
+          <p>Status: ${item.status === "approved" ? "Approved" : "Pending review"}</p>
+        </div>`).join("")
+    : `<div class="empty-state">You have not submitted any materials yet.</div>`;
+}
+
+renderTrending();
+filterPlatforms("All");
+renderBrowse();
