@@ -3,61 +3,246 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Verified Course Material</title>
+  <title>StudyHub | Engineering Notes</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <header>
-    <h1>Verified Course Material</h1>
-    <p>Learn Better. Learn from Verified Resources.</p>
-  </header>
+  <div class="announcement">
+    ✨ STUDY HUB · LEARN · PRACTICE · SUCCEED
+    <span>100% FREE STUDY RESOURCES</span>
+  </div>
 
-  <nav>
-    <button onclick="showSection('home')">Home</button>
-    <button onclick="showSection('browse')">Browse Notes</button>
-    <button onclick="showSection('upload')">Upload Material</button>
-  </nav>
+  <header class="navbar">
+    <a class="brand" href="#" onclick="showSection('home'); return false;">
+      <span class="logo">🎓</span>
+      <span>
+        <strong>Study<span>Hub</span></strong>
+        <small>Technical Notes & Formula Sheets</small>
+      </span>
+    </a>
+
+    <nav>
+      <button class="nav-btn active" data-section="home"
+        onclick="showSection('home')">▣ Home</button>
+      <button class="nav-btn" data-section="browse"
+        onclick="showSection('browse')">▤ Browse Notes</button>
+      <button class="nav-btn" data-section="branches"
+        onclick="showSection('branches')">▱ Branches</button>
+      <button class="nav-btn" data-section="upload"
+        onclick="showSection('upload')">↑ Upload Notes</button>
+      <button class="nav-btn" data-section="account"
+        onclick="showSection('account')">♙ My Account</button>
+    </nav>
+  </header>
 
   <main>
     <section id="home" class="section">
-      <h2>Welcome to Verified Course Material</h2>
-      <p>Find notes and study material for your subjects.</p>
+      <div class="hero">
+        <div class="eyebrow">✦ STUDY SMART · ALL ENGINEERING BRANCHES & SEMESTERS</div>
+        <h1>BEST WEBSITES FOR<br>
+          <span>TECHNICAL NOTES</span>
+        </h1>
+        <p>HIGH QUALITY NOTES · 100% FREE · STUDY SMART</p>
 
-      <input id="homeSubject" placeholder="Enter subject name">
-      <button onclick="searchFromHome()">Search Material</button>
+        <form class="search-bar" id="homeSearchForm">
+          <input id="homeSearch"
+            placeholder="Search subject, branch (CSE/ECE/MECH), topic, or semester..."
+            aria-label="Search study material">
+          <button type="submit">Search →</button>
+        </form>
+
+        <div class="popular">
+          <b>Popular:</b>
+          <button onclick="quickSearch('Data Structures')">Data Structures</button>
+          <button onclick="quickSearch('Operating Systems')">Operating Systems</button>
+          <button onclick="quickSearch('DBMS')">DBMS</button>
+          <button onclick="quickSearch('Computer Networks')">Computer Networks</button>
+          <button onclick="quickSearch('Digital Logic')">Digital Logic</button>
+        </div>
+      </div>
+
+      <div class="feature-grid">
+        <article class="feature">
+          <span>📘</span>
+          <div><h3>SYLLABUS COVERED</h3>
+            <p>Detailed notes for all subjects</p></div>
+        </article>
+        <article class="feature">
+          <span>🎯</span>
+          <div><h3>EXAM FOCUSED</h3>
+            <p>Important topics & solved examples</p></div>
+        </article>
+        <article class="feature">
+          <span>☁️</span>
+          <div><h3>EASY TO ACCESS</h3>
+            <p>Free study resources</p></div>
+        </article>
+        <article class="feature">
+          <span>📂</span>
+          <div><h3>WELL ORGANIZED</h3>
+            <p>Branch and semester wise</p></div>
+        </article>
+        <article class="feature">
+          <span>✓</span>
+          <div><h3>TRUSTED SOURCES</h3>
+            <p>Links to learning platforms</p></div>
+        </article>
+        <article class="feature">
+          <span>⚡</span>
+          <div><h3>QUICK SEARCH</h3>
+            <p>Find resources easily</p></div>
+        </article>
+      </div>
+
+      <div class="section-heading">
+        <div>
+          <h2>✨ TRENDING ENGINEERING NOTES & CHEAT SHEETS</h2>
+          <p>Discover useful topics and learning resources.</p>
+        </div>
+        <button class="text-btn" onclick="showSection('browse')">View All →</button>
+      </div>
+      <div id="trendingGrid" class="cards-grid"></div>
+
+      <div class="section-heading">
+        <div>
+          <h2>⭐ TOP 10 WEBSITES FOR TECHNICAL NOTES</h2>
+          <p>Explore learning platforms for engineering students and developers.</p>
+        </div>
+      </div>
+      <div class="filter-row" id="platformFilters">
+        <button class="filter active" data-filter="All" onclick="filterPlatforms('All')">All 10 Platforms</button>
+        <button class="filter" data-filter="CS & IT" onclick="filterPlatforms('CS & IT')">CS & IT</button>
+        <button class="filter" data-filter="GATE & University" onclick="filterPlatforms('GATE & University')">GATE & University</button>
+        <button class="filter" data-filter="Web Dev & APIs" onclick="filterPlatforms('Web Dev & APIs')">Web Dev & APIs</button>
+        <button class="filter" data-filter="All Branches" onclick="filterPlatforms('All Branches')">All Branches</button>
+      </div>
+      <div id="platformGrid" class="cards-grid"></div>
     </section>
 
     <section id="browse" class="section hidden">
-      <h2>Browse Course Material</h2>
+      <div class="page-heading">
+        <p class="eyebrow">YOUR LEARNING LIBRARY</p>
+        <h1>Browse <span>Study Materials</span></h1>
+        <p>Search topics, subjects, branches and semesters.</p>
+      </div>
+      <input id="browseSearch" class="wide-input"
+        placeholder="Search notes, topic or subject..."
+        aria-label="Search notes">
+      <div class="filter-row">
+        <select id="branchFilter" aria-label="Filter branch">
+          <option value="">All Branches</option>
+          <option>CSE</option><option>IT</option><option>ECE</option>
+          <option>Mechanical</option><option>Civil</option><option>Electrical</option>
+        </select>
+        <select id="semesterFilter" aria-label="Filter semester">
+          <option value="">All Semesters</option>
+          <option value="1">Semester 1</option><option value="2">Semester 2</option>
+          <option value="3">Semester 3</option><option value="4">Semester 4</option>
+          <option value="5">Semester 5</option><option value="6">Semester 6</option>
+          <option value="7">Semester 7</option><option value="8">Semester 8</option>
+        </select>
+      </div>
+      <div id="browseGrid" class="cards-grid"></div>
+    </section>
 
-      <input id="searchInput" placeholder="Search subject or topic"
-        oninput="displayMaterials()">
-
-      <div id="materialList"></div>
+    <section id="branches" class="section hidden">
+      <div class="page-heading">
+        <p class="eyebrow">FIND YOUR COURSE</p>
+        <h1>Engineering <span>Branches</span></h1>
+        <p>Choose your branch and semester to find study materials.</p>
+      </div>
+      <div class="branch-grid">
+        <button class="branch-card" onclick="selectBranch('CSE')">💻<h3>Computer Science</h3><p>CSE</p></button>
+        <button class="branch-card" onclick="selectBranch('IT')">🌐<h3>Information Technology</h3><p>IT</p></button>
+        <button class="branch-card" onclick="selectBranch('ECE')">📡<h3>Electronics & Communication</h3><p>ECE</p></button>
+        <button class="branch-card" onclick="selectBranch('Mechanical')">⚙️<h3>Mechanical Engineering</h3><p>MECH</p></button>
+        <button class="branch-card" onclick="selectBranch('Civil')">🏗️<h3>Civil Engineering</h3><p>CIVIL</p></button>
+        <button class="branch-card" onclick="selectBranch('Electrical')">🔌<h3>Electrical Engineering</h3><p>EE</p></button>
+      </div>
+      <h2 class="subheading">Choose Semester</h2>
+      <div class="semester-grid">
+        <button onclick="selectSemester(1)">Semester 1</button>
+        <button onclick="selectSemester(2)">Semester 2</button>
+        <button onclick="selectSemester(3)">Semester 3</button>
+        <button onclick="selectSemester(4)">Semester 4</button>
+        <button onclick="selectSemester(5)">Semester 5</button>
+        <button onclick="selectSemester(6)">Semester 6</button>
+        <button onclick="selectSemester(7)">Semester 7</button>
+        <button onclick="selectSemester(8)">Semester 8</button>
+      </div>
     </section>
 
     <section id="upload" class="section hidden">
-      <h2>Upload Course Material</h2>
+      <div class="page-heading">
+        <p class="eyebrow">CONTRIBUTE TO LEARNING</p>
+        <h1>Upload <span>Study Material</span></h1>
+        <p>Submit a useful resource for review.</p>
+      </div>
+      <form id="uploadForm" class="upload-form">
+        <label>Teacher / Contributor Name
+          <input id="teacherName" required placeholder="Enter your name">
+        </label>
+        <label>Subject
+          <input id="subject" required placeholder="e.g. Data Structures">
+        </label>
+        <label>Topic
+          <input id="topic" required placeholder="e.g. Binary Search Trees">
+        </label>
+        <label>Branch
+          <select id="uploadBranch" required>
+            <option value="">Choose branch</option>
+            <option>CSE</option><option>IT</option><option>ECE</option>
+            <option>Mechanical</option><option>Civil</option><option>Electrical</option>
+          </select>
+        </label>
+        <label>Semester
+          <select id="uploadSemester" required>
+            <option value="">Choose semester</option>
+            <option value="1">Semester 1</option><option value="2">Semester 2</option>
+            <option value="3">Semester 3</option><option value="4">Semester 4</option>
+            <option value="5">Semester 5</option><option value="6">Semester 6</option>
+            <option value="7">Semester 7</option><option value="8">Semester 8</option>
+          </select>
+        </label>
+        <label>PDF / Resource URL
+          <input id="materialLink" type="url" placeholder="https://...">
+        </label>
+        <label class="full-width">Description
+          <textarea id="description" placeholder="Describe this study material"></textarea>
+        </label>
+        <button class="primary-btn" type="submit">Submit for Review →</button>
+        <p id="uploadMessage" class="full-width"></p>
+      </form>
+    </section>
 
-      <input id="teacherName" placeholder="Teacher name">
-      <input id="subject" placeholder="Subject name">
-      <input id="topic" placeholder="Topic name">
-      <input id="course" placeholder="Course / Branch">
-      <input id="materialLink" placeholder="Material link (optional)">
-
-      <textarea id="description"
-        placeholder="Material description"></textarea>
-
-      <button onclick="addMaterial()">Submit Material</button>
-
-      <p id="message"></p>
+    <section id="account" class="section hidden">
+      <div class="page-heading">
+        <p class="eyebrow">YOUR PERSONAL SPACE</p>
+        <h1>My <span>Account</span></h1>
+        <p>This demo stores saved items on this browser only.</p>
+      </div>
+      <div class="account-panel">
+        <h2>🔖 My Bookmarks</h2>
+        <div id="bookmarksGrid" class="cards-grid"></div>
+        <h2 class="subheading">📤 My Submitted Materials</h2>
+        <div id="myUploads"></div>
+      </div>
     </section>
   </main>
 
   <footer>
-    <p>Verified Course Material Project | 2026</p>
+    <a class="brand" href="#" onclick="showSection('home'); return false;">
+      <span class="logo">🎓</span><strong>Study<span>Hub</span></strong>
+    </a>
+    <p>Learn · Practice · Succeed</p>
+    <p class="footer-small">Educational resource directory. Check each provider's website for its current content and terms.</p>
   </footer>
+
+  <dialog id="previewDialog">
+    <button class="close-btn" onclick="closePreview()">✕</button>
+    <div id="previewContent"></div>
+  </dialog>
 
   <script src="script.js"></script>
 </body>
