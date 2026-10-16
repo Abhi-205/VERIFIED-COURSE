@@ -1,75 +1,125 @@
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #0f172a;
-    color: #f8fafc;
-    margin: 0;
-    padding: 20px;
+let materials = JSON.parse(
+  localStorage.getItem("courseMaterials") || "[]"
+);
+
+function showSection(sectionId) {
+  document.querySelectorAll(".section").forEach(section => {
+    section.classList.add("hidden");
+  });
+
+  document.getElementById(sectionId).classList.remove("hidden");
+
+  if (sectionId === "browse") {
+    displayMaterials();
+  }
+
+  window.scrollTo({ top: 0, behavior: "smooth" });
 }
-.container {
-    max-width: 800px;
-    margin: 0 auto;
+
+function searchFromHome() {
+  const subject = document.getElementById("homeSubject").value;
+
+  document.getElementById("searchInput").value = subject;
+
+  showSection("browse");
+  displayMaterials();
 }
-header {
-    text-align: center;
-    margin-bottom: 30px;
+
+function addMaterial() {
+  const teacher = document.getElementById("teacherName").value.trim();
+  const subject = document.getElementById("subject").value.trim();
+  const topic = document.getElementById("topic").value.trim();
+  const course = document.getElementById("course").value.trim();
+  const link = document.getElementById("materialLink").value.trim();
+  const description = document.getElementById("description").value.trim();
+
+  if (!teacher || !subject || !topic || !course) {
+    document.getElementById("message").textContent =
+      "Please fill in teacher name, subject, topic and course.";
+    return;
+  }
+
+  if (link && !/^https?:\/\/\S+$/i.test(link)) {
+    document.getElementById("message").textContent =
+      "Please enter a valid link starting with http:// or https://";
+    return;
+  }
+
+  const material = {
+    id: Date.now(),
+    teacher,
+    subject,
+    topic,
+    course,
+    link,
+    description,
+    verified: false
+  };
+
+  materials.push(material);
+
+  localStorage.setItem(
+    "courseMaterials",
+    JSON.stringify(materials)
+  );
+
+  document.getElementById("message").textContent =
+    "Material submitted! It is awaiting verification.";
+
+  document.getElementById("teacherName").value = "";
+  document.getElementById("subject").value = "";
+  document.getElementById("topic").value = "";
+  document.getElementById("course").value = "";
+  document.getElementById("materialLink").value = "";
+  document.getElementById("description").value = "";
 }
-.form-card, .results-card {
-    background: #1e293b;
-    padding: 25px;
-    border-radius: 12px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-    margin-bottom: 20px;
+
+function displayMaterials() {
+  const search = document.getElementById("searchInput")
+    .value.toLowerCase().trim();
+
+  const list = document.getElementById("materialList");
+
+  const filtered = materials.filter(material =>
+    material.verified &&
+    (
+      material.subject.toLowerCase().includes(search) ||
+      material.topic.toLowerCase().includes(search) ||
+      material.course.toLowerCase().includes(search)
+    )
+  );
+
+  if (filtered.length === 0) {
+    list.innerHTML =
+      "<p>No verified materials found. Please try another search.</p>";
+    return;
+  }
+
+  list.innerHTML = filtered.map(material => `
+    <div class="material-card">
+      <h3>${escapeHTML(material.topic)}</h3>
+      <p><strong>Subject:</strong> ${escapeHTML(material.subject)}</p>
+      <p><strong>Course:</strong> ${escapeHTML(material.course)}</p>
+      <p><strong>Teacher:</strong> ${escapeHTML(material.teacher)}</p>
+      <p>${escapeHTML(material.description)}</p>
+      ${material.link
+        ? `<a href="${escapeHTML(material.link)}"
+             target="_blank" rel="noopener noreferrer">
+             Open Material
+           </a>`
+        : ""}
+    </div>
+  `).join("");
 }
-.input-group {
-    margin-bottom: 15px;
-    display: flex;
-    flex-direction: column;
+
+function escapeHTML(value) {
+  return String(value).replace(/[&<>"']/g, char => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;"
+  })[char]);
 }
-.input-group-row {
-    display: flex;
-    gap: 15px;
-}
-.input-group-row .input-group {
-    flex: 1;
-}
-label {
-    margin-bottom: 5px;
-    font-weight: 600;
-}
-input, select {
-    padding: 10px;
-    border-radius: 6px;
-    border: 1px solid #334155;
-    background: #0f172a;
-    color: white;
-}
-button {
-    width: 100%;
-    padding: 12px;
-    background: #2563eb;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    font-size: 16px;
-    cursor: pointer;
-    font-weight: bold;
-}
-button:hover {
-    background: #1d4ed8;
-}
-.status-badge {
-    background: #065f46;
-    color: #34d399;
-    padding: 10px;
-    border-radius: 6px;
-    font-weight: bold;
-    text-align: center;
-    margin-bottom: 15px;
-}
-pre {
-    background: #0f172a;
-    padding: 15px;
-    border-radius: 6px;
-    overflow-x: auto;
-    color: #38bdf8;
-}
+
+showSection("home");
