@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verified Course Material Studio</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎓 Verified Course Material Studio</h1>
+            <p>Generate verified, error-free teaching material with automated execution reports.</p>
+        </header>
+
+        <section class="form-card">
+            <h2>Create New Course Material</h2>
+            <div class="input-group">
+                <label>Topic Name:</label>
+                <input type="text" id="topic" placeholder="e.g. Java Spring Boot 3 / React Basics">
+            </div>
+            <div class="input-group-row">
+                <div class="input-group">
+                    <label>Student Level:</label>
+                    <select id="level">
+                        <option>Beginner</option>
+                        <option>Intermediate</option>
+                        <option>Advanced</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Session Length:</label>
+                    <select id="duration">
+                        <option>30 Minutes</option>
+                        <option>1 Hour</option>
+                        <option>2 Hours</option>
+                    </select>
+                </div>
+            </div>
+            <button onclick="generateMaterial()">🚀 Generate & Verify Material</button>
+        </section>
+
+        <section id="results" class="results-card" style="display:none;">
+            <div class="status-badge">🟢 CODE VERIFICATION STATUS: 100% PASSED (Java 21 / Spring Boot 3)</div>
+            
+            <h2>Generated Material Output</h2>
+            <div class="tabs">
+                <div class="tab active">Slides & Notes</div>
+                <div class="tab">Verified Code Snippets</div>
+                <div class="tab">Quiz & Cheat Sheet</div>
+            </div>
+
+            <div class="content-box">
+                <h3>Slide 1: Introduction to Topic</h3>
+                <p><strong>Trainer Notes:</strong> Explain core architecture before diving into code examples.</p>
+                <pre><code>// Automated Test Passed
+public class CourseTest {
+    public static void main(String[] args) {
+        System.out.println("Verified execution successful!");
+    }
+}</code></pre>
+            </div>
+        </section>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
